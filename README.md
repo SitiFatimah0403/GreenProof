@@ -1,8 +1,14 @@
-#✅ Revamped Project Theme: "GreenProof" – Web3 for Climate Action (SDG 13)#
+# GreenProof Smart Contract
 
-🌍 Theme :
+GreenProof is a blockchain-based verification system for environmental actions.
 
-Use blockchain + smart contracts to fight climate change (SDG 13) by verifying eco-friendly actions (like tree planting, recycling, cleanups) and rewarding users with NFTs as proof of impact.
-GreenProof NFT allows users to upload a photo as proof of their eco-friendly actions (like planting a tree 🌳 or recycling ♻️). 
-This photo is then minted as an NFT on the blockchain, acting as a permanent, tamper-proof certificate that the action was done. 
-It provides transparency, digital ownership, and public accountability for green contributions.
+## Features
+
+- Submit eco-friendly action proof (with IPFS hash)
+- Verified by an authorized verifier
+- View submitted and verified proofs
+
+## Deploy
+
+```bash
+npx hardhat run scripts/deploy.js --network sepolia
