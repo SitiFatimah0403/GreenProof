@@ -14,7 +14,7 @@ contract GreenProofNFT is ERC721URIStorage, Ownable {
     constructor() ERC721("GreenProof", "GREEN") Ownable(msg.sender) {}
 
     // Public function to mint an NFT
-    function mintNFT(address to, string memory tokenURI) public onlyOwner {
+    function mintNFT(address to, string memory tokenURI) public  {
         uint256 tokenId = _tokenIdCounter;
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);

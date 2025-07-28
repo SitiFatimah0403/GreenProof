@@ -10,6 +10,10 @@ const UploadImage = () => {
     setFile(e.target.files[0]);
   };
 
+  //for NFA
+    const [userInput, setUserInput] = useState("");
+    const [nfaReply, setNfaReply] = useState("");
+
   const uploadToPinata = async () => {
     if (!file) return alert("Please select a file first.");
 
@@ -46,6 +50,33 @@ const UploadImage = () => {
     }
   };
 
+  // Function to handle NFA reply
+    const handleNfaReply = async () => {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+        "Authorization": `Bearer YOUR_OPENAI_API_KEY`, 
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+            {
+            role: "system",
+            content: "You're an eco-friendly assistant helping users improve their climate actions.",
+            },
+            {
+            role: "user",
+            content: `I just planted a tree and uploaded proof. What else should I do?`,
+            },
+        ],
+        }),
+    });
+
+    const data = await response.json();
+    setNfaReply(data.choices[0].message.content);
+    };
+
   return (
     <div>
       <h2>Upload Image to IPFS</h2>
@@ -62,6 +93,11 @@ const UploadImage = () => {
           <img src={ipfsUrl} alt="Uploaded to IPFS" width="300" />
         </div>
       )}
+
+      <textarea onChange={(e) => setUserInput(e.target.value)} />
+        <button onClick={handleNfaReply}>Ask NFA</button>
+        <p>{nfaReply}</p>
+
     </div>
   );
 };

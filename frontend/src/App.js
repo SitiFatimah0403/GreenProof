@@ -73,8 +73,8 @@ const mintNFT = async () => {
 
   console.log("Image uploaded to IPFS:", ipfsUrl);
 
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  const signer = await provider.getSigner();
+  const provider = new ethers.providers.Web3Provider(window.ethereum); // ✅ ethers v5
+  const signer = provider.getSigner();
   const account = await signer.getAddress(); // ✅ get wallet address
 
   console.log("Minting to address:", account);
