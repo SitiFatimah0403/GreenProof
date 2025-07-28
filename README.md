@@ -1,14 +1,4 @@
-# Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
-```
-# GreenProof
+✅ Revamped Project Theme: "GreenProof" – Web3 for Climate Action (SDG 13)
+🌍 Theme
+Use blockchain + smart contracts to fight climate change (SDG 13) by verifying eco-friendly actions (like tree planting, recycling, cleanups) and rewarding users with NFTs as proof of impact.
+GreenProof NFT allows users to upload a photo as proof of their eco-friendly actions (like planting a tree 🌳 or recycling ♻️). This photo is then minted as an NFT on the blockchain, acting as a permanent, tamper-proof certificate that the action was done. It provides transparency, digital ownership, and public accountability for green contributions.
