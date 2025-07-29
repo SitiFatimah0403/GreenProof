@@ -8,6 +8,7 @@ const FormData = require('form-data');
 const upload = multer();
 
 const app = express();
+const PORT = 5000; // This is the port
 app.use(express.json());
 app.use(cors({ //cors = allow frontend (localhost 3000)to communicate with backend (localhost 5000) , diorang different domain
   origin: 'http://localhost:3000',
@@ -17,30 +18,22 @@ app.use(cors({ //cors = allow frontend (localhost 3000)to communicate with backe
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 // Endpoint to handle NFA requests
+const { getGeminiResponse } = require('./nfa.js'); //logic dia extract from nfa.js
+
 app.post('/api/nfa', async (req, res) => {
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: prompt }]
-            }
-          ]
-        }),
-      }
-    );
-    const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "❌ No suggestion found.";
-    res.json(data);
+    const prompt = req.body.action;
+
+    // Use Gemini SDK-based response
+    const reply = await getGeminiResponse(prompt);
+
+    res.json({ reply });
   } catch (err) {
     console.error("❌ NFA Gemini error:", err);
-    res.status(500).json({ error: 'Failed to fetch from Google API' });
+    res.status(500).json({ error: 'Failed to get suggestion from Gemini' });
   }
 });
+
 
 // Endpoint to upload image to IPFS via Pinata
 app.post('/api/upload-ipfs', upload.single('file'), async (req, res) => {
