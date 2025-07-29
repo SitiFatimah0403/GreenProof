@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import GreenProofNFT from './abi/GreenProofNFT.json';
 
-const CONTRACT_ADDRESS = '0xEA12ff45281316e5Dc102ac1b59E68340716852F';
+const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 
 function App() {
   const [account, setAccount] = useState(null); // User's connected wallet address
@@ -30,30 +30,21 @@ function App() {
   };
 
   // Function to upload file to IPFS using Pinata
-  const uploadToIPFS = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
+const uploadToIPFS = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
 
-    const metadata = JSON.stringify({ name: file.name });
-    formData.append('pinataMetadata', metadata);
+  const res = await fetch('http://localhost:5000/api/upload-ipfs', {
+    method: 'POST',
+    body: formData,
+  });
 
-    const options = JSON.stringify({ cidVersion: 0 });
-    formData.append('pinataOptions', options);
+  if (!res.ok) throw new Error('IPFS upload failed');
+  const data = await res.json();
+  return data.ipfsUrl;
+};
 
-    const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        pinata_api_key: 'bcb622214e072abc876d',
-        pinata_secret_api_key: 'bc95cfa2ad83402e8cea718d1236d9b4e956c66920cab9ec044d2a25d5bcc03e',
-      },
-    });
 
-    if (!res.ok) throw new Error('IPFS upload failed');
-
-    const data = await res.json();
-    return `https://gateway.pinata.cloud/ipfs/${data.IpfsHash}`;
-  };
 
   // Function to mint NFT on the blockchain
   const mintNFT = async () => {
@@ -95,7 +86,7 @@ const handleAskNFA = async () => {
     const data = await res.json();
     setNfaReply(data.reply);
   } catch (err) {
-    console.error(err);
+    console.error('NFA Error:',err);
     setNfaReply('⚠️ Failed to get suggestion from NFA.');
   }
 };

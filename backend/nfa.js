@@ -3,21 +3,18 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-async function runNFA() {
+// Gemini-powered NFA (optional, async)
+async function getGeminiResponse(prompt) {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    
-    const result = await model.generateContent("Suggest 3 skills based on someone who likes data and sustainability.");
-
+    const result = await model.generateContent(prompt);
     const response = await result.response;
-    console.log(response.text());
+    return response.text();
   } catch (error) {
     console.error("❌ Gemini API Error:", error);
+    return "⚠️ Gemini failed to respond. Try again later.";
   }
 }
-
-runNFA();
 
 // Simulated NFA agent for eco suggestions
 function getNFAResponse(userAction) {
@@ -40,4 +37,4 @@ function getNFAResponse(userAction) {
   return "✅ Thank you for taking climate action! Keep it up. 🌍 Want more tips? Try reducing electricity use or switching to reusable items.";
 }
 
-module.exports = { getNFAResponse };
+module.exports = { getNFAResponse, getGeminiResponse };
