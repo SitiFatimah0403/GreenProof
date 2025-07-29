@@ -84,21 +84,21 @@ function App() {
   };
 
   // Function to handle NFA reply
-  const handleAskNFA = async () => {
-    try {
-      const res = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyC26NvQ19KbzojC6gIL7iUOX2w5cYWRxAA', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: userAction }),
-      });
+const handleAskNFA = async () => {
+  try {
+    const res = await fetch('http://localhost:5000/api/nfa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: userAction }),
+    });
 
-      const data = await res.json();
-      setNfaReply(data.reply);
-    } catch (err) {
-      console.error(err);
-      setNfaReply('⚠️ Failed to get suggestion from NFA.');
-    }
-  };
+    const data = await res.json();
+    setNfaReply(data.reply);
+  } catch (err) {
+    console.error(err);
+    setNfaReply('⚠️ Failed to get suggestion from NFA.');
+  }
+};
 
   // Render the main application UI
   return (

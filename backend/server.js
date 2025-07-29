@@ -1,23 +1,28 @@
-// backend/server.js
 const express = require('express');
-const bodyParser = require('body-parser');
+const fetch = require('node-fetch');
 const cors = require('cors');
-const { getNFAResponse } = require('./nfa');
 
 const app = express();
-app.use(cors()); // Allow frontend requests
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors());
 
-// NFA endpoint
-app.post('/nfa-response', (req, res) => {
-  const userInput = req.body.action;
-  const response = getNFAResponse(userInput);
-  res.json({ reply: response });
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+
+app.post('/api/nfa', async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: req.body.action }),
+      }
+    );
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch from Google API' });
+  }
 });
 
-// Serve the React app
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`✅ Backend running on http://localhost:${PORT}`);
-});
-// Export the app for testing or further use
+app.listen(5000, () => console.log('Backend running on port 5000'));
